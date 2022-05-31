@@ -5,11 +5,16 @@ from xlib.db import WarehouseConnection
 from xlib.load_config import _get_warehouse_creds
 from xlib.utils import get_exchange_data, _get_exchange_insert_query, _get_utc_from_unix_time
 
+from dagster import op, job
 
-def extract(url):
+
+@op
+def extract():
+    url = "https://api.coincap.io/v2/exchanges"
     return get_exchange_data(url)
 
 
+@op
 def transform_enrich(data):
     batchId = str(uuid4())
     batchDatetime = datetime.now()
@@ -21,13 +26,12 @@ def transform_enrich(data):
     return data
 
 
+@op
 def load(data):
     with WarehouseConnection(db_conn=_get_warehouse_creds()).managed_cursor() as cursor:
         psycopg2_extras.execute_batch(cur=cursor, sql=_get_exchange_insert_query(), argslist=data)
 
 
-if __name__ == "__main__":
-    url = "https://api.coincap.io/v2/exchanges"
-    data = extract(url)
-    data_enriched = transform_enrich(data)
-    load(data_enriched)
+@job
+def run():
+    load(transform_enrich(extract()))

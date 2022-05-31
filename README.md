@@ -23,22 +23,26 @@ pip3 install -r requirements.txt
 ```bash
 python3 setup.py
 ```
-### Run ETL
-- Run the command below to run the ETL pipeline:
+### Run ETL usin dagit (Web UI)
+- Run the command below to run the Dagit (Dagster UI Component) on http://localhost:3000:
 ```bash
-python3 run_etl.py
+dagit -f run_etl.py
 ```
+- Then click on `Launchpad`
+  - ![Click on Launchpad](https://github.com/mikekenneth/coincap_etl/raw/dagster/img/img4.png "Click on Launchpad")
+- Then click on `Launch Run` (lower righ corner) to trigger the job
+  - ![Click on Launch Run](https://github.com/mikekenneth/coincap_etl/raw/dagster/img/img5.png "Click on Launch Run")
 
 ## Tech Stack
 - [Python3](https://www.python.org/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Dagster](https://www.dagster.io/)
 
 
 ## TO-DO
 - [x] Make the ETL functional as a python script
 - [x] Add A Batch ID and Datetime
 - [x] Design & Documentation
-- [ ] Add Functional Data Engineering Principles (Idempotence, Atomicity, Reusability, Performance-Measurement)
 - [ ] Add Dagster as Workflow Orchestrator
 - [ ] Add Apache Airflow as Workflow Orchestrator
 - [ ] Add Apache Beam as Workflow Orchestrator
